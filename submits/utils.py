@@ -42,7 +42,16 @@ class LotteryUtils:
     def getLotteryDeadlineDate(created, durationP):
         epoch = int(time.mktime(created.timetuple())*1000)
         duration = durationP*60*1000
-        deadline_ts = epoch - duration
+        deadline_ts = epoch + duration
+        return deadline_ts
+        #deadline_date = datetime.fromtimestamp(deadline_ts/1000)
+        #return deadline_date
+
+    @staticmethod
+    def getLotteryDeadlineDateAsFormatted(created, durationP):
+        epoch = int(time.mktime(created.timetuple())*1000)
+        duration = durationP*60*1000
+        deadline_ts = epoch + duration
         deadline_date = datetime.fromtimestamp(deadline_ts/1000)
         return deadline_date
 

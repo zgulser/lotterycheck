@@ -74,8 +74,11 @@ def playlottery(request):
             return redirect('winner/')
         else:
             lotterydeadline = utils.LotteryUtils.getLotteryDeadlineDate(lotteryM.created_at, lotteryM.duration)
+            lotterydeadlineformatted = utils.LotteryUtils.getLotteryDeadlineDateAsFormatted(lotteryM.created_at, lotteryM.duration)
             print (">> Log.verbose lottery deadline date @: %s" %(lotterydeadline))
-            return render(request, 'play_lottery_form.html', {'formset': formset, 'lotterydeadline':lotterydeadline})
+            return render(request, 'play_lottery_form.html', {'formset': formset,
+                                                              'lotterydeadline':lotterydeadline,
+                                                              'lotterydeadlineformatted':lotterydeadlineformatted})
     except:
         print (">> Log.Error: Exception @playlottery")
 

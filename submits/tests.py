@@ -23,11 +23,17 @@ class UnitTests:
         pass
 
     def testLotteryExpiresFieldUpdated(self):
+        #TODO
         pass
 
     def testLotteryWinnerFieldUpdated(self):
+        #TODO
         pass
 
-    def testExecuteLottery(self):
+    def testLotteryDurationFeasible(self):
+        #TODO
+        pass
+
+    def testLotteryDurationFeasible(self):
         #TODO
         pass

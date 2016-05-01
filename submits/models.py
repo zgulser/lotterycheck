@@ -7,7 +7,7 @@ import uuid
 class Lottery(models.Model):
     created_at = UnixDateTimeField(auto_now=True)
     token = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    duration = models.IntegerField(default=1)
+    duration = models.IntegerField(default=10)
     expired = models.BooleanField(default=False)
     winner_row = models.IntegerField(default=-1)
 
