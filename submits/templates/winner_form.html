@@ -5,21 +5,32 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
-{# Display django.contrib.messages as Bootstrap alerts #}
-{% bootstrap_messages %}
+<h1>
+    <h1 style="color:blue;" align="center" >Results!</h1>
+</h1>
 
-<table>
+<table align="center">
+    <br></br>
+    <br></br>
     <tr>
         <th>Name</th>
+        <th>&nbsp&nbsp----------&nbsp&nbsp</th>
         <th>Surname</th>
     </tr>
+    <tr>
+        <th>&nbsp</th>
+    </tr>
     {% for lotteryplayer in query_results %}
-        {% if forloop.counter0 == {{winnerrow}} %}
-            <tr style="background-color:yellow">
+        {% if forloop.counter == 1 %}
+            <tr align="center" style="color:red;">
                 <td>{{ lotteryplayer.firstname }}</td>
+                <td>&nbsp&nbsp----------&nbsp&nbsp</td>
                 <td>{{ lotteryplayer.lastname }}</td>
+            </tr>
         {% else %}
+            <tr align="center">
                 <td>{{ lotteryplayer.firstname }}</td>
+                <td>&nbsp&nbsp----------&nbsp&nbsp</td>
                 <td>{{ lotteryplayer.lastname }}</td>
             </tr>
         {% endif %}

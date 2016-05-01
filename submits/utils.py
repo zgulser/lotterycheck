@@ -76,10 +76,12 @@ class LotteryUtils:
 
     @staticmethod
     def updateLotteryModelAsExpired(ptoken):
+        print (">> Log.Verbose: Updating lottery expiration...")
         Lottery.objects.filter(token=ptoken).update(expired=True) # save might have been used as well on the lot object
 
     @staticmethod
     def updateLotteryModelWinner(ptoken, row):
+        print (">> Log.Verbose: Updating lottery winner column...")
         Lottery.objects.filter(token=ptoken).update(winner_row=row) # save might have been used as well on the lot object
 
     @staticmethod

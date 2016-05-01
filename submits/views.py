@@ -6,6 +6,9 @@ from django.http import HttpResponse
 import time
 import submits.javascript
 
+# global/stub variable to check thread start
+started = False
+
 # Create a timer thread
 
 import threading
@@ -16,13 +19,15 @@ class SubThread(threading.Thread):
         self.threadName = pThreadName
         self.count = 0
         self.lottery = lottery
+        started = True
 
     def run(self):
         remaining = utils.LotteryUtils.getRemainingTimeInSecs(self.lottery)
         while remaining > 0:
-            print (">> Log.Verbose: Remaning time i thread: %s" %(utils.LotteryUtils.getRemainingTimeFormatted(self.lottery)))
+            print (">> Log.Verbose: Remaning secs: %s" %(remaining))
             time.sleep(1)
-            # TODO: update view(s)
+            remaining = utils.LotteryUtils.getRemainingTimeInSecs(self.lottery)
+        print (">> Log.Verbose: Lottery ended!")
         utils.LotteryUtils.updateLotteryModelAsExpired(self.lottery.token)
         utils.LotteryUtils.calculateWinner(self.lottery.token)
 
@@ -32,14 +37,13 @@ class SubThread(threading.Thread):
 # play lottery form view function
 # M prefix to identify it as Mdel data
 #
-started = False
 def playlottery(request):
     try:
         # grab the lottery object, create one if necessary
         lotteryM = utils.LotteryUtils.createLotteryObj()
-        print (">> Log.verbose lottery deadline date @: %s" %(utils.LotteryUtils.getLotteryDeadlineDate(lotteryM.created_at, lotteryM.duration)))
 
-        if started == False:
+        # check lottery has expired or not
+        if not utils.LotteryUtils.isLotteryExpired(lotteryM):
             print (">> Log.Verbose: Updater thread has created!")
             thread1 = SubThread(1, 'Thread-updater', lotteryM)
             thread1.start()
@@ -65,13 +69,13 @@ def playlottery(request):
             formset = playerFormSet()
 
         if utils.LotteryUtils.isLotteryExpired(lotteryM):
-            #queryset = LotteryPlayer.objects.all()
-            #winnerrow = utils.LotteryUtils.getWinnerRow(lotteryM.token)
-            #return render("winner_form.html", {"queryset": queryset, 'winner': winnerrow})
-            pass
+            print (">> Log.Verbose: Lottery expired - redirecting to Results page")
+            request.session['lottery'] = lotteryM
+            return redirect('winner/')
         else:
-            formattedRemaningTime = utils.LotteryUtils.getRemainingTimeFormatted(lotteryM)
-            return render(request, 'play_lottery_form.html', {'formset': formset, 'lottery':formattedRemaningTime})
+            lotterydeadline = utils.LotteryUtils.getLotteryDeadlineDate(lotteryM.created_at, lotteryM.duration)
+            print (">> Log.verbose lottery deadline date @: %s" %(lotterydeadline))
+            return render(request, 'play_lottery_form.html', {'formset': formset, 'lotterydeadline':lotterydeadline})
     except:
         print (">> Log.Error: Exception @playlottery")
 
@@ -83,11 +87,7 @@ def confirmation(request):
     try:
         playerR = request.session.get('player', None)
         lotteryR = request.session.get('lottery', None)
-        print(">> Log.verbose player name is: %s" %(playerR.firstname))
         return render(request, 'play_status_success_form.html', {'player': playerR, 'lottery': lotteryR})
-        #queryset = LotteryPlayer.objects.all()
-        #winnerrow = utils.LotteryUtils.getWinnerRow(lotteryR.token)
-        #return render("winner_form.html", {"queryset": queryset, 'winner': winnerrow})
     except:
         print (">> Log.Error: Exception @confirmation")
 
@@ -96,7 +96,6 @@ def playerexists(request):
         playerR = request.session.get('player', None)
         lotteryR = request.session.get('lottery', None)
         return render(request, 'player_exists_form.html', {'player': playerR, 'lottery':lotteryR})
-        pass
     except:
         print (">> Log.Error: Exception @playerexists")
 
@@ -104,7 +103,11 @@ def playerexists(request):
 # result form view function
 #
 def winner(request):
-    return HttpResponse("Hello, world. You're at the lottery result.")
-
-def backToPlayerForm():
-    return redirect('playlottery/')
+    try:
+        lotteryR = request.session.get('lottery', None)
+        print(">> Log.verbose winning row is: %s" %(lotteryR.winner_row))
+        query_results = LotteryPlayer.objects.all()
+        #winnerrow = utils.LotteryUtils.getWinnerRow(lotteryR.token)
+        return render(request, "winner_form.html", {"query_results": query_results, 'winnerrow': 1})
+    except:
+        print (">> Log.Error: Exception @winner")
