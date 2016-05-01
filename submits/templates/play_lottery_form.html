@@ -1,0 +1,31 @@
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<form method="post" action="">
+    <h1>
+        <h1 style="color:blue;" align="center" >WELCOME TO LOTTERY</h1>
+    </h1>
+
+    <h1>
+        <h1 style="color:red;" align="center" ><font size="4">Quick! Lottery is going to end in {{lottery}}</font></h1>
+    </h1>
+
+    <div id="clockdiv"></div>
+
+    <h1 style="padding:100px">
+        {% bootstrap_formset formset layout='vertical' width='100' %}
+    </h1>
+
+    <h1 align="center">
+        {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary" %}
+        {% csrf_token %}
+    </h1>
+</form>
+

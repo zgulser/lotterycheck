@@ -1,0 +1,30 @@
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<br method="POST" action="">
+    <h1>
+        <h1 style="color:blue;" align="center" >Hello {{ player.firstname }},  you already registered!</h1>
+    </h1>
+
+    <br></br>
+    <h1>
+        <h1 style="color:red;" align="center" >Lottery is going to end in:</h1>
+    </h1>
+
+    <h1>
+        <h1 style="color:red;" align="center" >{{lottery.duration}}</h1>
+    </h1>
+
+    <br></br>
+    <br></br>
+    <h1 align="center">
+        {% bootstrap_button "Back" button_type="submit" button_class="btn-primary" %}
+    </h1>
+</form>

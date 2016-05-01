@@ -1,0 +1,27 @@
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Surname</th>
+    </tr>
+    {% for lotteryplayer in query_results %}
+        {% if forloop.counter0 == {{winnerrow}} %}
+            <tr style="background-color:yellow">
+                <td>{{ lotteryplayer.firstname }}</td>
+                <td>{{ lotteryplayer.lastname }}</td>
+        {% else %}
+                <td>{{ lotteryplayer.firstname }}</td>
+                <td>{{ lotteryplayer.lastname }}</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+</table>
